@@ -1,0 +1,18 @@
+Index: /Users/asurin/src/edk2/Clover/rEFIt_UEFI/Platform/Settings.c
+===================================================================
+--- /Users/asurin/src/edk2/Clover/rEFIt_UEFI/Platform/Settings.c	(revision 4243)
++++ /Users/asurin/src/edk2/Clover/rEFIt_UEFI/Platform/Settings.c	(working copy)
+@@ -867,11 +867,11 @@
+     Patches->KPIvyXCPM = IsPropertyTrue (Prop);
+   }
+ 
+-    /*
++
+   Prop = GetProperty(DictPointer, "KernelHaswellE");
+   if (Prop != NULL || gBootChanged) {
+     Patches->KPHaswellE = IsPropertyTrue(Prop);
+-  }*/
++  }
+ 
+   Prop = GetProperty (DictPointer, "ATIConnectorsController");
+   if (Prop != NULL) {

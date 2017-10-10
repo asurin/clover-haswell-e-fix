@@ -1,5 +1,5 @@
 #!/bin/bash
-PATCH_LOCATION="/Users/asurin/Development/clover"
+PATCH_LOCATION="/Users/asurin/Development/clover-haswell-e-fix/patch"
 SOURCE_LOCATION="/Users/asurin/src/edk2/Clover"
 
 rm $SOURCE_LOCATION/rEFIt_UEFI/Platform/*.orig
