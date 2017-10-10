@@ -1,7 +1,7 @@
 # Clover Haswell-E patch (5930k, 5960X)
 
 ## Dependencies
-- XCode 8 Command line tools (9 will likely work soon)
+- XCode 9
 - buildclover (http://www.insanelymac.com/forum/files/file/589-build-clovercommand/) - make sure it's in your path (Menu option 1)
 - *You may need to edit buildclover to comment out the line setting SUGGESTED_CLOVER_REV to a blank value*
 
