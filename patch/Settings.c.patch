@@ -1,6 +1,6 @@
 Index: /Users/asurin/src/edk2/Clover/rEFIt_UEFI/Platform/Settings.c
 ===================================================================
---- /Users/asurin/src/edk2/Clover/rEFIt_UEFI/Platform/Settings.c	(revision 4243)
+--- /Users/asurin/src/edk2/Clover/rEFIt_UEFI/Platform/Settings.c	(revision 4231)
 +++ /Users/asurin/src/edk2/Clover/rEFIt_UEFI/Platform/Settings.c	(working copy)
 @@ -867,11 +867,11 @@
      Patches->KPIvyXCPM = IsPropertyTrue (Prop);

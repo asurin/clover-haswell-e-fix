@@ -1,88 +1,73 @@
 Index: /Users/asurin/src/edk2/Clover/rEFIt_UEFI/Platform/kernel_patcher.c
 ===================================================================
---- /Users/asurin/src/edk2/Clover/rEFIt_UEFI/Platform/kernel_patcher.c	(revision 4243)
+--- /Users/asurin/src/edk2/Clover/rEFIt_UEFI/Platform/kernel_patcher.c	(revision 4231)
 +++ /Users/asurin/src/edk2/Clover/rEFIt_UEFI/Platform/kernel_patcher.c	(working copy)
-@@ -740,6 +740,53 @@
+@@ -740,6 +740,39 @@
    return TRUE;
  }
  
-+BOOLEAN KernelHaswellEPatch(VOID *kernelData)
-+{
-+  // Credit to stinga11 for the patches used below
-+  // Based on Pike R. Alpha's Haswell patch for Mavericks
++ BOOLEAN KernelHaswellEPatch(VOID *kernelData)
++ {
++   // Credit to stinga11 for the patches used below
++   // Based on Pike R. Alpha's Haswell patch for Mavericks
 +
-+  UINT8   *Bytes;
-+  UINT32  Index;
-+  BOOLEAN PatchApplied;
++   UINT8   *Bytes;
++   UINT32  Index;
++   BOOLEAN PatchApplied;
 +
-+  DBG("Searching for Haswell-E patch pattern\n");
++   DBG("Searching for Haswell-E patch pattern\n");
 +
-+  Bytes = (UINT8*)kernelData;
-+  PatchApplied = FALSE;
++   Bytes = (UINT8*)kernelData;
++   PatchApplied = FALSE;
 +
-+  for (Index = 0; Index < 0x1000000; ++Index) {
-+    if (Bytes[Index] == 0x74 && Bytes[Index + 1] == 0x11 && Bytes[Index + 2] == 0x83 && Bytes[Index + 3] == 0xF8 && Bytes[Index + 4] == 0x3C) {
-+      Bytes[Index + 4] = 0x3F;
++   for (Index = 0; Index < 0x1000000; ++Index) {
++     if (Bytes[Index] == 0x74 && Bytes[Index + 1] == 0x11 && Bytes[Index + 2] == 0x83 && Bytes[Index + 3] == 0xF8 && Bytes[Index + 4] == 0x3C) {
++       Bytes[Index + 4] = 0x3F;
++       DBG("Found Haswell-E pattern; patched.\n");
++       if (PatchApplied) {
++         break;
++       }
 +
-+/*      DBG("Found Haswell-E pattern #1; patched.\n");
++       PatchApplied = TRUE;
++     }
++   }
 +
-+      if (PatchApplied) {
-+        break;
-+      }
++   if (!PatchApplied) {
++     DBG("Can't find Haswell-E patch pattern, kernel patch aborted.\n");
++   }
 +
-+      PatchApplied = TRUE;
-+    }
-+
-+    if (Bytes[Index] == 0xEB && Bytes[Index + 1] == 0x0A && Bytes[Index + 2] == 0x83 && Bytes[Index + 3] == 0xF8 && Bytes[Index + 4] == 0x3A) {
-+      Bytes[Index + 4] = 0x3F;
-+*/
-+      DBG("Found Haswell-E pattern; patched.\n");
-+
-+      if (PatchApplied) {
-+        break;
-+      }
-+
-+      PatchApplied = TRUE;
-+    }
-+  }
-+
-+  if (!PatchApplied) {
-+    DBG("Can't find Haswell-E patch pattern, kernel patch aborted.\n");
-+  }
-+
-+  return PatchApplied;
-+}
++   return PatchApplied;
++ }
 +
  //
  // syscl - EnableExtCpuXCPM(): enable extra(unsupport) Cpu XCPM function
  // PowerManagement that will be enabled on:
-@@ -773,140 +820,35 @@
+@@ -773,117 +806,28 @@
  }
  
  //
 -// syscl - Enable Haswell-E XCPM
 -// Hex data provided and polished (c) PMheart, idea (c) Pike R.Alpha
-+// Enable Haswell-E on 10.10 - 10.10.1(10.10.2+ support natively)
++// Enable Broadwell-E/EP PowerManagement on 10.12+ by syscl
  //
 -BOOLEAN HaswellEXCPM(VOID *kernelData, LOADER_ENTRY *Entry, BOOLEAN use_xcpm_idle)
-+BOOLEAN HaswellEPM(VOID *kernelData, LOADER_ENTRY *Entry, BOOLEAN use_xcpm_idle)
++BOOLEAN BroadwellEPM(VOID *kernelData, LOADER_ENTRY *Entry, BOOLEAN use_xcpm_idle)
  {
 -    DBG("HaswellEXCPM() ===>\n");
-+    DBG("HaswellEPM() ===>\n");
++    DBG("BroadwellEPM() ===>\n");
      UINT8       *kern = (UINT8*)kernelData;
 -    CHAR8       *comment;
--    UINT32      i;
--    UINT32      patchLocation;
+     UINT32      i;
+     UINT32      patchLocation;
      UINT64      os_version = AsciiOSVersionToUint64(Entry->OSVersion);
-+    UINTN       maxReplace = 0; // enable MaxReplaces
    
--    // check OS version suit for patches
+     // check OS version suit for patches
 -    if (os_version < AsciiOSVersionToUint64("10.8.5") || os_version >= AsciiOSVersionToUint64("10.14")) {
 -        DBG("Unsupported macOS.\nHaswell-E requires macOS 10.8.5 - 10.13.x, aborted\n");
 -        DBG("HaswellEXCPM() <===FALSE\n");
-+    if (os_version < AsciiOSVersionToUint64("10.10")) {
-+        DBG("Haswell-E requires macOS version at least 10.10, aborted\n");
-+        DBG("HaswellEPM() <===FALSE\n");
++    if (os_version < AsciiOSVersionToUint64("10.8.5")) {
++        DBG("Unsupported macOS.\nBroadwell-E/EP requires macOS at least 10.8.5, aborted\n");
++        DBG("BroadwellEPM() <===FALSE\n");
          return FALSE;
      }
      
@@ -100,16 +85,13 @@ Index: /Users/asurin/src/edk2/Clover/rEFIt_UEFI/Platform/kernel_patcher.c
 -        applyKernPatch(kern, find, sizeof(find), repl, comment);
 -    } else if (os_version <= AsciiOSVersionToUint64("10.10.1")) {
 -        // 10.10 - 10.10.1
-+    if (os_version <= AsciiOSVersionToUint64("10.10.1")) {
-+        /**
-+         * find: 0x74, 0x11, 0x83, 0xF8, 0x3C
-+         * repl: 0x74, 0x11, 0x83, 0xF8, 0x3F
-+         */
-         UINT8 find[] = { 0x74, 0x11, 0x83, 0xF8, 0x3C };
-         UINT8 repl[] = { 0x74, 0x11, 0x83, 0xF8, 0x3F };
+-        UINT8 find[] = { 0x74, 0x11, 0x83, 0xF8, 0x3C };
+-        UINT8 repl[] = { 0x74, 0x11, 0x83, 0xF8, 0x3F };
 -        applyKernPatch(kern, find, sizeof(find), repl, comment);
 -    } // 10.10.2+: native support reached, no need to patch
--    
++    Entry->KernelAndKextPatches->FakeCPUID = (UINT32)(os_version < AsciiOSVersionToUint64("10.10.3") ? 0x0306C0 : 0x040674);
++    KernelCPUIDPatch(kern, Entry);
+     
 -    // _xcpm_bootstrap
 -    comment = "_xcpm_bootstrap";
 -    if (os_version <= AsciiOSVersionToUint64("10.8.5")) {
@@ -157,12 +139,9 @@ Index: /Users/asurin/src/edk2/Clover/rEFIt_UEFI/Platform/kernel_patcher.c
 -        UINT8 find[] = { 0x89, 0xD8, 0x04, 0xC4, 0x3C, 0x22 };
 -        UINT8 repl[] = { 0x89, 0xD8, 0x04, 0xC1, 0x3C, 0x22 };
 -        applyKernPatch(kern, find, sizeof(find), repl, comment);
-+        if (SearchAndReplace(kern, KERNEL_MAX_SIZE, find, sizeof(find), repl, maxReplace)) {
-+            DBG("Found 0x3C\n");
-+            DBG("Applied 0x3C -> 0x3F patch\n");
-     }
+-    }
 -    
--    DBG("Searching _xcpm_pkg_scope_msr ...\n");
+     DBG("Searching _xcpm_pkg_scope_msr ...\n");
 -    comment = "_xcpm_pkg_scope_msrs";
 -    if (os_version <= AsciiOSVersionToUint64("10.8.5")) {
 -        // 10.8.5
@@ -186,6 +165,54 @@ Index: /Users/asurin/src/edk2/Clover/rEFIt_UEFI/Platform/kernel_patcher.c
 -        applyKernPatch(kern, find, sizeof(find), repl, comment);
 -    } else {
 -        // 10.10+
++    if (os_version >= AsciiOSVersionToUint64("10.12")) {
+         patchLocation = 0; // clean out the value just in case
+         for (i = 0; i < 0x1000000; i++) {
+             if (kern[i+0] == 0xBE && kern[i+1] == 0x07 && kern[i+2] == 0x00 && kern[i+3] == 0x00 &&
+@@ -901,63 +845,41 @@
+             DBG("Applied _xcpm_pkg_scope_msr patch\n");
+         } else {
+             DBG("_xcpm_pkg_scope_msr not found, patch aborted\n");
+-            DBG("HaswellEXCPM() <===FALSE\n");
++            DBG("BroadwellEPM() <===FALSE\n");
+             return FALSE;
+         }
+     }
+     
+-    DBG("HaswellEXCPM() <===\n");
++    DBG("BroadwellEPM() <===\n");
+     return TRUE;
+ }
+ 
+-//
+-// Enable Broadwell-E/EP PowerManagement on 10.12+ by syscl
+-//
+-BOOLEAN BroadwellEPM(VOID *kernelData, LOADER_ENTRY *Entry, BOOLEAN use_xcpm_idle)
++ BOOLEAN HaswellEPM(VOID *kernelData, LOADER_ENTRY *Entry, BOOLEAN use_xcpm_idle)
+ {
+-    DBG("BroadwellEPM() ===>\n");
++     DBG("HaswellEPM() ===>\n");
+     UINT8       *kern = (UINT8*)kernelData;
+-    UINT32      i;
+-    UINT32      patchLocation;
+     UINT64      os_version = AsciiOSVersionToUint64(Entry->OSVersion);
++     UINTN       maxReplace = 0; // enable MaxReplaces
+     
+-    // check OS version suit for patches
+-    if (os_version < AsciiOSVersionToUint64("10.8.5")) {
+-        DBG("Unsupported macOS.\nBroadwell-E/EP requires macOS at least 10.8.5, aborted\n");
+-        DBG("BroadwellEPM() <===FALSE\n");
++     if (os_version < AsciiOSVersionToUint64("10.10")) {
++         DBG("Haswell-E requires macOS version at least 10.10, aborted\n");
++         DBG("HaswellEPM() <===FALSE\n");
+         return FALSE;
+     }
+     
+-    Entry->KernelAndKextPatches->FakeCPUID = (UINT32)(os_version < AsciiOSVersionToUint64("10.10.3") ? 0x0306C0 : 0x040674);
+-    KernelCPUIDPatch(kern, Entry);
+-    
+-    DBG("Searching _xcpm_pkg_scope_msr ...\n");
+-    if (os_version >= AsciiOSVersionToUint64("10.12")) {
 -        patchLocation = 0; // clean out the value just in case
 -        for (i = 0; i < 0x1000000; i++) {
 -            if (kern[i+0] == 0xBE && kern[i+1] == 0x07 && kern[i+2] == 0x00 && kern[i+3] == 0x00 &&
@@ -193,51 +220,41 @@ Index: /Users/asurin/src/edk2/Clover/rEFIt_UEFI/Platform/kernel_patcher.c
 -                patchLocation = i+7;
 -                DBG("Found _xcpm_pkg_scope_msr\n");
 -                break;
++    if (os_version <= AsciiOSVersionToUint64("10.10.1")) {
++          UINT8 find[] = { 0x74, 0x11, 0x83, 0xF8, 0x3C };
++          UINT8 repl[] = { 0x74, 0x11, 0x83, 0xF8, 0x3F };
++         if (SearchAndReplace(kern, KERNEL_MAX_SIZE, find, sizeof(find), repl, maxReplace)) {
++             DBG("Found 0x3C\n");
++             DBG("Applied 0x3C -> 0x3F patch\n");
              }
--        }
+         }
          
 -        if (patchLocation) {
 -            for (i = 0; i < 5; i++) {
 -                kern[patchLocation+i] = 0x90;
--            }
++     DBG("HaswellEPM() <===\n");
++      return TRUE;
+             }
 -            DBG("Applied _xcpm_pkg_scope_msr patch\n");
 -        } else {
 -            DBG("_xcpm_pkg_scope_msr not found, patch aborted\n");
--            DBG("HaswellEXCPM() <===FALSE\n");
+-            DBG("BroadwellEPM() <===FALSE\n");
 -            return FALSE;
 -        }
 -    }
--    
--    DBG("HaswellEXCPM() <===\n");
-+    DBG("HaswellEPM() <===\n");
-     return TRUE;
- }
- 
-@@ -1678,6 +1620,18 @@
-     DBG_RT(Entry, "Disabled\n");
-   }
      
-+ // Haswell-E: Outdated patterns?
-+ DBG_RT(Entry, "\nHaswell-E patch: ");
-+ if (Entry->KernelAndKextPatches->KPHaswellE) {
-+   DBG_RT(Entry, "Enabled: ");
-+   KernelAndKextPatcherInit(Entry);
-+   if (KernelData == NULL) goto NoKernelData;
-+   patchedOk = KernelHaswellEPatch(KernelData);
-+   DBG_RT(Entry, patchedOk ? " OK\n" : " FAILED!\n");
-+ } else {
-+   DBG_RT(Entry, "Disabled\n");
-+ }
-+
-   //
-   // syscl - EnableExtCpuXCPM: Enable unsupported CPU's PowerManagement
-   //
-@@ -1703,7 +1657,7 @@
+-    DBG("BroadwellEPM() <===\n");
+-    return TRUE;
+-}
+ //
+ // syscl - this patch provides XCPM support for Haswell low-end(HSWLowEnd) and platforms later than Haswell
+ // implemented by syscl
+@@ -1703,7 +1625,7 @@
           }
           
           if (gCPUStructure.Model == CPU_MODEL_HASWELL_E)
 -             EnableExtCpuXCPM = HaswellEXCPM;
-+             EnableExtCpuXCPM = HaswellEPM;
++          EnableExtCpuXCPM = HaswellEPM;
           
           if (gCPUStructure.Model == CPU_MODEL_BROADWELL_E5 || gCPUStructure.Model == CPU_MODEL_BROADWELL_DE) {
               EnableExtCpuXCPM = BroadwellEPM;
