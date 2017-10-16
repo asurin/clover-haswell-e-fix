@@ -1,6 +1,6 @@
 Index: /Users/asurin/src/edk2/Clover/rEFIt_UEFI/Platform/Settings.c
 ===================================================================
---- /Users/asurin/src/edk2/Clover/rEFIt_UEFI/Platform/Settings.c	(revision 4241)
+--- /Users/asurin/src/edk2/Clover/rEFIt_UEFI/Platform/Settings.c	(revision 4246)
 +++ /Users/asurin/src/edk2/Clover/rEFIt_UEFI/Platform/Settings.c	(working copy)
 @@ -867,11 +867,11 @@
      Patches->KPIvyXCPM = IsPropertyTrue (Prop);
@@ -16,3 +16,12 @@ Index: /Users/asurin/src/edk2/Clover/rEFIt_UEFI/Platform/Settings.c
  
    Prop = GetProperty (DictPointer, "ATIConnectorsController");
    if (Prop != NULL) {
+@@ -1813,7 +1813,7 @@
+ 
+     // InjectKexts default values
+     Entry->Flags = OSFLAG_UNSET(Entry->Flags, OSFLAG_CHECKFAKESMC);
+-  //  Entry->Flags = OSFLAG_UNSET(Entry->Flags, OSFLAG_WITHKEXTS);
++    Entry->Flags = OSFLAG_UNSET(Entry->Flags, OSFLAG_WITHKEXTS);
+ 
+     Prop = GetProperty (DictPointer, "InjectKexts");
+     if (Prop != NULL) {

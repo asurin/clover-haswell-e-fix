@@ -7,6 +7,7 @@ rm $SOURCE_LOCATION/rEFIt_UEFI/Platform/*.rej
 rm $SOURCE_LOCATION/rEFIt_UEFI/refit/*.orig
 rm $SOURCE_LOCATION/rEFIt_UEFI/refit/*.rej
 patch -p0 -i $PATCH_LOCATION/kernel_patcher.c.patch
+patch -p0 -i $PATCH_LOCATION/kext_inject.c.patch
 patch -p0 -i $PATCH_LOCATION/Settings.c.patch
 patch -p0 -i $PATCH_LOCATION/lib.h.patch
 patch -p0 -i $PATCH_LOCATION/main.c.patch

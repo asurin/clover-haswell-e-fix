@@ -10,13 +10,17 @@
 - Commit results, along with the revision to this file below
 
 ## Apply
-- Run `prepare_tree_for_patch.sh`, select option 2, quit
+- Run `TARGET_REV=<svn revision to build> prepare_tree_for_patch.sh`, select option 2, quit
 - Run `apply_patch.sh`, fix merge conflicts
 - run `SUGGESTED_CLOVER_REV=<new revision> buildclover`, select 5, 1 and then 1
-- This clover should be valid.  Assuming it builds and tests out, please go ahead and re-run the steps in _Generate Patch_, update the patch files here and commit
+- This clover should be valid.  Assuming it builds and tests out, please go ahead and re-run the steps in _Generate patch_, update the patch files here and commit
 
 ## Current build (suitable host for patch files checked in)
-4231
+4246
 
 ## Previous builds
+4241
+4239
+4235
+4231
 4220
