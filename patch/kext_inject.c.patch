@@ -1,6 +1,6 @@
 Index: /Users/asurin/src/edk2/Clover/rEFIt_UEFI/Platform/kext_inject.c
 ===================================================================
---- /Users/asurin/src/edk2/Clover/rEFIt_UEFI/Platform/kext_inject.c	(revision 4246)
+--- /Users/asurin/src/edk2/Clover/rEFIt_UEFI/Platform/kext_inject.c	(revision 4259)
 +++ /Users/asurin/src/edk2/Clover/rEFIt_UEFI/Platform/kext_inject.c	(working copy)
 @@ -255,7 +255,7 @@
    SIDELOAD_KEXT *CurrentPlugInKext = NULL;

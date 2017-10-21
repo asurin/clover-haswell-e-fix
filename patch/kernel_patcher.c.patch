@@ -1,6 +1,6 @@
 Index: /Users/asurin/src/edk2/Clover/rEFIt_UEFI/Platform/kernel_patcher.c
 ===================================================================
---- /Users/asurin/src/edk2/Clover/rEFIt_UEFI/Platform/kernel_patcher.c	(revision 4246)
+--- /Users/asurin/src/edk2/Clover/rEFIt_UEFI/Platform/kernel_patcher.c	(revision 4259)
 +++ /Users/asurin/src/edk2/Clover/rEFIt_UEFI/Platform/kernel_patcher.c	(working copy)
 @@ -740,6 +740,40 @@
    return TRUE;
@@ -218,12 +218,12 @@ Index: /Users/asurin/src/edk2/Clover/rEFIt_UEFI/Platform/kernel_patcher.c
  //
  // syscl - this patch provides XCPM support for Haswell low-end(HSWLowEnd) and platforms later than Haswell
  // implemented by syscl
-@@ -1703,7 +1631,7 @@
-          }
-          
-          if (gCPUStructure.Model == CPU_MODEL_HASWELL_E)
--             EnableExtCpuXCPM = HaswellEXCPM;
-+             EnableExtCpuXCPM = HaswellEPM;
-          
-          if (gCPUStructure.Model == CPU_MODEL_BROADWELL_E5 || gCPUStructure.Model == CPU_MODEL_BROADWELL_DE) {
-              EnableExtCpuXCPM = BroadwellEPM;
+@@ -1846,7 +1774,7 @@
+ 
+           case CPU_MODEL_HASWELL_E:
+             // Haswell-E
+-            EnableExtCpuXCPM = HaswellEXCPM;
++            EnableExtCpuXCPM = HaswellEPM;
+             break;
+               
+           case CPU_MODEL_BROADWELL_E5:
