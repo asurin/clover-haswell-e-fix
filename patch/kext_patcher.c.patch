@@ -1,16 +1,7 @@
 Index: /Users/asurin/src/edk2/Clover/rEFIt_UEFI/Platform/kext_patcher.c
 ===================================================================
---- /Users/asurin/src/edk2/Clover/rEFIt_UEFI/Platform/kext_patcher.c	(revision 4259)
+--- /Users/asurin/src/edk2/Clover/rEFIt_UEFI/Platform/kext_patcher.c	(revision 4278)
 +++ /Users/asurin/src/edk2/Clover/rEFIt_UEFI/Platform/kext_patcher.c	(working copy)
-@@ -1226,7 +1226,7 @@
-   //Slice
-   // I see no reason to disable kext injection if FakeSMC found in cache
-   //since rev4240 we have manual kext inject disable
-- // CheckForFakeSMC(WholePlist, Entry);
-+  CheckForFakeSMC(WholePlist, Entry);
-   
-   DictPtr = WholePlist;
-   while ((DictPtr = AsciiStrStr(DictPtr, "dict>")) != NULL) {
 @@ -1385,4 +1385,3 @@
      
    }
