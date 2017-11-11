@@ -1,6 +1,6 @@
 Index: /Users/asurin/src/edk2/Clover/rEFIt_UEFI/Platform/Settings.c
 ===================================================================
---- /Users/asurin/src/edk2/Clover/rEFIt_UEFI/Platform/Settings.c	(revision 4293)
+--- /Users/asurin/src/edk2/Clover/rEFIt_UEFI/Platform/Settings.c	(revision 4297)
 +++ /Users/asurin/src/edk2/Clover/rEFIt_UEFI/Platform/Settings.c	(working copy)
 @@ -934,6 +934,11 @@
      DBG ("FakeCPUID: %x\n", Patches->FakeCPUID);

@@ -6,7 +6,6 @@ REVISION=$(svn info $CLOVER_LOCATION 2>&1 | awk '/^Revision:/ {print $2}')
 
 rm $PATCH_LOCATION/*.patch
 svn diff -x -w -r $REVISION $CLOVER_LOCATION/rEFIt_UEFI/Platform/kernel_patcher.c > $PATCH_LOCATION/kernel_patcher.c.patch
-svn diff -x -w -r $REVISION $CLOVER_LOCATION/rEFIt_UEFI/Platform/kext_inject.c > $PATCH_LOCATION/kext_inject.c.patch
 svn diff -x -w -r $REVISION $CLOVER_LOCATION/rEFIt_UEFI/Platform/kext_patcher.c > $PATCH_LOCATION/kext_patcher.c.patch
 svn diff -x -w -r $REVISION $CLOVER_LOCATION/rEFIt_UEFI/Platform/Settings.c > $PATCH_LOCATION/Settings.c.patch
 svn diff -x -w -r $REVISION $CLOVER_LOCATION/rEFIt_UEFI/refit/lib.h > $PATCH_LOCATION/lib.h.patch
