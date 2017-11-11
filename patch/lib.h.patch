@@ -1,6 +1,6 @@
 Index: /Users/asurin/src/edk2/Clover/rEFIt_UEFI/refit/lib.h
 ===================================================================
---- /Users/asurin/src/edk2/Clover/rEFIt_UEFI/refit/lib.h	(revision 4278)
+--- /Users/asurin/src/edk2/Clover/rEFIt_UEFI/refit/lib.h	(revision 4293)
 +++ /Users/asurin/src/edk2/Clover/rEFIt_UEFI/refit/lib.h	(working copy)
 @@ -560,6 +560,7 @@
    BOOLEAN KPDebug;

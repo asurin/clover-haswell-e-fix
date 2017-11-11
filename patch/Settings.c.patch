@@ -1,8 +1,8 @@
 Index: /Users/asurin/src/edk2/Clover/rEFIt_UEFI/Platform/Settings.c
 ===================================================================
---- /Users/asurin/src/edk2/Clover/rEFIt_UEFI/Platform/Settings.c	(revision 4278)
+--- /Users/asurin/src/edk2/Clover/rEFIt_UEFI/Platform/Settings.c	(revision 4293)
 +++ /Users/asurin/src/edk2/Clover/rEFIt_UEFI/Platform/Settings.c	(working copy)
-@@ -898,6 +898,11 @@
+@@ -934,6 +934,11 @@
      DBG ("FakeCPUID: %x\n", Patches->FakeCPUID);
    }
  
@@ -14,7 +14,7 @@ Index: /Users/asurin/src/edk2/Clover/rEFIt_UEFI/Platform/Settings.c
    Prop = GetProperty (DictPointer, "ATIConnectorsController");
    if (Prop != NULL) {
      UINTN len = 0, i=0;
-@@ -1821,7 +1826,7 @@
+@@ -1857,7 +1862,7 @@
  
      // InjectKexts default values
      Entry->Flags = OSFLAG_UNSET(Entry->Flags, OSFLAG_CHECKFAKESMC);

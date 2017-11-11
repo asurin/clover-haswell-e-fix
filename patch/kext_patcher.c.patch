@@ -1,6 +1,6 @@
 Index: /Users/asurin/src/edk2/Clover/rEFIt_UEFI/Platform/kext_patcher.c
 ===================================================================
---- /Users/asurin/src/edk2/Clover/rEFIt_UEFI/Platform/kext_patcher.c	(revision 4278)
+--- /Users/asurin/src/edk2/Clover/rEFIt_UEFI/Platform/kext_patcher.c	(revision 4293)
 +++ /Users/asurin/src/edk2/Clover/rEFIt_UEFI/Platform/kext_patcher.c	(working copy)
 @@ -1385,4 +1385,3 @@
      
